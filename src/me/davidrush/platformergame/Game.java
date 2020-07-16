@@ -14,7 +14,7 @@ public class Game implements Runnable {
     private Display display;
     public int width, height;
     public String title;
-    private String version = "2D Game Test v.1.3";
+    private String version = "2D Game Test v.1.3.2";
 
     private int highscore;
 
@@ -75,7 +75,7 @@ public class Game implements Runnable {
         if(State.getCurrentState() != null) {
             State.getCurrentState().render(g);
         }
-        g.drawString(version, width - 190, 20);
+        g.drawString(version, width - 240, 20);
 
         //end drawing
         bs.show();
