@@ -157,6 +157,14 @@ public class Player extends Entity{
                 return true;
             }
         }
+        for(PowerUp powerUp : level.getPowerUps()) {
+            if(newX < powerUp.getX() + powerUp.getWidth() &&
+                    newX + width >= powerUp.getX() &&
+                    newY <= powerUp.getY() + powerUp.getHeight() &&
+                    newY + height >= powerUp.getY()) {
+                power = powerUp.getPower();
+            }
+        }
         if(Math.random() > 0.99 && health < DEFAULT_HEALTH) {
             health++;
         }

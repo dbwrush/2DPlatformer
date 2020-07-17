@@ -40,4 +40,8 @@ public class PowerUp extends Entity{
     public void render(Graphics g) {
         g.drawImage(sprite, (int)(x - level.cameraX), (int) y, width, height, null);
     }
+
+    public String getPower() {
+        return power;
+    }
 }

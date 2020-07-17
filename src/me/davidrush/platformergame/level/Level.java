@@ -142,6 +142,10 @@ public class Level {
     public int getCameraOffset() {
         return cameraOffset;
     }
+
+    public ArrayList<PowerUp> getPowerUps() {
+        return powerUps;
+    }
 }
 /*
 todo:
