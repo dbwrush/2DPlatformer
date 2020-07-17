@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 
 public class Assets {
 
-    public static BufferedImage player, grass, stone, stoneBricks, stonePillar, wood, dirt, tallgrass, tree, enemy, bg1, bg2;
+    public static BufferedImage player, grass, stone, stoneBricks, stonePillar, wood, dirt, tallgrass, tree, enemy, bg1, bg2, jetpack;
     public static Font font;
     public static void init() {
         player = ImageLoader.loadImage("/textures/player.png");
@@ -20,7 +20,8 @@ public class Assets {
         enemy = ImageLoader.loadImage("/textures/enemy.png");
         bg1 = ImageLoader.loadImage("/textures/bg1.png");
         bg2 = ImageLoader.loadImage("/textures/bg2.png");
-        font = new Font("Courier", Font.BOLD, 20);
+        jetpack = ImageLoader.loadImage("/textures/jetpack.png");
+        font = new Font("Ariel", Font.BOLD, 20);
         System.out.println("Assets loaded");
     }
 }

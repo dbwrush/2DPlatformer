@@ -3,6 +3,7 @@ package me.davidrush.platformergame.level;
 import me.davidrush.platformergame.Game;
 import me.davidrush.platformergame.entities.Enemy;
 import me.davidrush.platformergame.entities.Player;
+import me.davidrush.platformergame.entities.PowerUp;
 import me.davidrush.platformergame.entities.background.Background;
 import me.davidrush.platformergame.entities.background.Midground;
 import me.davidrush.platformergame.entities.blocks.Block;
@@ -22,6 +23,7 @@ public class Level {
     private int chunksLength = 0, cameraOffset;
     public float cameraX;
     private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+    private ArrayList<PowerUp> powerUps = new ArrayList<PowerUp>();
     private GameState gameState;
     public Level(Game game, GameState gameState) {
         player = new Player(game, 0, 0, this, gameState);
@@ -41,6 +43,7 @@ public class Level {
         midgrounds.add(new Midground(game, cameraX, this, gameState));
         backgrounds.add(new Background(game, cameraX, this, gameState));
     }
+
     public void tick() {
         float startCameraX = cameraX;
         player.tick();
@@ -55,9 +58,17 @@ public class Level {
                 Enemy newEnemy = new Enemy(game, chunksLength - (int)offset, 0, this);
                 enemies.add(newEnemy);
             }
+            if(Math.random() > 0.9) {
+                double offset = (Math.random() * Chunk.width * Block.width);
+                PowerUp newPowerUp = new PowerUp(chunksLength - (int)offset, 0, this, game);
+                powerUps.add(newPowerUp);
+            }
             chunks.remove(0);
             if(enemies.size() > 10) {
                 enemies.remove(0);
+            }
+            if(powerUps.size() > 10) {
+                powerUps.remove(0);
             }
         }
         /*for(Chunk chunk : chunks) { //Currently no need to tick chunks, so don't bother.
@@ -65,6 +76,9 @@ public class Level {
         }*/
         for(Enemy enemy : enemies) {
             enemy.tick();
+        }
+        for(PowerUp powerUp : powerUps) {
+            powerUp.tick();
         }
         int midEnd = midgrounds.get(midgrounds.size() - 1).getX() + Midground.getWidth();
         int backEnd = backgrounds.get(backgrounds.size() - 1).getX() + Background.getWidth();
@@ -89,6 +103,7 @@ public class Level {
             background.tick(distance * Background.getMoveRate());
         }
     }
+
     public void render(Graphics g) {
         for(Background background : backgrounds) {
             background.render(g);
@@ -101,6 +116,9 @@ public class Level {
         }
         for(Enemy enemy : enemies) {
             enemy.render(g);
+        }
+        for(PowerUp powerUp : powerUps) {
+            powerUp.render(g);
         }
         player.render(g);
     }

@@ -13,7 +13,6 @@ public class Enemy extends Entity{
 
     public Enemy(Game game, float x, float y, Level level) {
         super(x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT, level, DEFAULT_FRICTION, DEFAULT_ACCELERATION, game);
-
     }
 
     public void planMovment() {

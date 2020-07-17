@@ -136,18 +136,20 @@ public class Player extends Entity{
     public void render(Graphics g) {
         g.drawImage(Assets.player, (int)(x - level.cameraX), (int) y, width, height, null);
     }
+
     public boolean checkEntityCollisions(float newX, float newY) {
         for(Enemy enemy : level.getEnemies()) {
             if(newX <= enemy.getX() + enemy.getWidth() &&
                     newX + width >= enemy.getX() &&
                     newY <= enemy.getY() + enemy.getHeight() &&
                     newY + height >= enemy.getY()) {
-                if(yMove > 0 && newY + (height / 2) < enemy.getY()) {
+                if(yMove > 0 && newY < enemy.getY()) {
                     level.killEnemy(enemy);
                     yMomentum = - yMomentum;
                 } else {
                     health -= 1;
                     //System.out.println("Health dropped to " + health);
+                    xMomentum += enemy.getxMomentum() / 10;
                     if(health <= 0) {
                         game.gameOver(gameState.getScore(), startTime);
                     }
