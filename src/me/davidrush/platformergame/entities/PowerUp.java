@@ -20,20 +20,30 @@ public class PowerUp extends Entity{
             sprite = Assets.jetpack;
         }
         if(Math.random() > 0.5) {
+            System.out.println("PowerUp moving right.");
             xMomentum = 1;
         } else {
             xMomentum = -1;
+            System.out.println("PowerUp moving left.");
         }
     }
 
     @Override
     public void tick() {
+        float oldx = x;
         xMove = 0;
         yMove = 0;
         yMomentum += DEFAULT_GRAVITY;
         xMove = xMomentum;
         yMove = yMomentum;
         move();
+        if(oldx == x) {
+            if(Math.random() > 0.5) {
+                xMomentum = 1;
+            } else {
+                xMomentum = -1;
+            }
+        }
     }
 
     @Override
