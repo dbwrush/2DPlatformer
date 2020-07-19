@@ -8,9 +8,10 @@ import me.davidrush.platformergame.level.Chunk;
 import me.davidrush.platformergame.level.Level;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class GameState extends State{
-
+    private BufferedImage currentPowerUp = Assets.player;
     private Player player;
     private Level level;
     public float cameraX;
@@ -42,11 +43,24 @@ public class GameState extends State{
             g.drawString("Highscore: " + Integer.toString(highscore), 10, 50);
         }
         g.drawString("Health: " + Integer.toString(player.getHealth()), 10, 80);
-        g.drawString("Fuel: " + Integer.toString(player.getJumpCount()), 10, 110);
+        g.drawString("Energy: " + Integer.toString(player.getEnergy()), 10, 110);
         g.drawString("Speed: " + Integer.toString(Math.round(player.getxMomentum())), 10, 140);
+        g.drawImage(currentPowerUp, 10, game.height - currentPowerUp.getHeight() * 2 - 10, currentPowerUp.getWidth() * 2, currentPowerUp.getHeight() * 2, null);
     }
 
     public int getScore() {
         return score;
+    }
+
+    public void setCurrentPowerUp(String powerName) {
+        if(powerName.equals("jetpack")) {
+            currentPowerUp = Assets.jetpack;
+        } else if(powerName.equals("speed")) {
+            currentPowerUp = Assets.speed;
+        } else if(powerName.equals("shield")) {
+            currentPowerUp = Assets.shield;
+        } else if(powerName.equals("invincibility")) {
+            currentPowerUp = Assets.invincibility;
+        }
     }
 }

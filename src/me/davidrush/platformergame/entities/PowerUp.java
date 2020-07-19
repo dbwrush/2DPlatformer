@@ -10,21 +10,26 @@ import java.util.ArrayList;
 
 public class PowerUp extends Entity{
     private static final float DEFAULT_ACCELERATION = 0.025f, DEFAULT_FRICTION = 0.025f, DEFAULT_GRAVITY = 0.1f;
-    private static String[] powerUps = {"jetpack"};
-    private String power;
+    private static String[] powerUps = {"jetpack", "speed", "shield", "invincibility"};
+    private String power = "";
     private BufferedImage sprite;
     public PowerUp(float x, float y, Level level,  Game game) {
         super(x, y, 16, 16, level, DEFAULT_ACCELERATION, DEFAULT_ACCELERATION, game);
         power = powerUps[(int)(Math.random() * powerUps.length)];
         if(power.equals("jetpack")) {
             sprite = Assets.jetpack;
+        } else if(power.equals("speed")) {
+            sprite = Assets.speed;
+        } else if(power.equals("shield")) {
+            sprite = Assets.shield;
+        } else if(power.equals("invincibility")) {
+            sprite = Assets.invincibility;
         }
+        System.out.println("New powerup " + power + " generated.");
         if(Math.random() > 0.5) {
-            System.out.println("PowerUp moving right.");
             xMomentum = 1;
         } else {
             xMomentum = -1;
-            System.out.println("PowerUp moving left.");
         }
     }
 

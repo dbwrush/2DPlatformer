@@ -22,7 +22,7 @@ public class Player extends Entity{
     public static final int DEFAULT_WIDTH = 14,
                             DEFAULT_HEIGHT = 30;
     private Level level;
-    protected int health, jumpCount;
+    protected int health, energy;
     private long startTime;
     private String power;
 
@@ -31,7 +31,7 @@ public class Player extends Entity{
         this.game = game;
         this.level = level;
         health = DEFAULT_HEALTH;
-        jumpCount = DEFAULT_JUMPCOUNT;
+        energy = DEFAULT_JUMPCOUNT;
         acceleration = DEFAULT_ACCELERATION;
         xMove = 0;
         yMove = 0;
@@ -54,30 +54,41 @@ public class Player extends Entity{
         drifting = true;
         yMomentum += DEFAULT_GRAVITY;
         boolean onFloor = checkLevelCollisions(x, y + 1);
-        if(onFloor && jumpCount < DEFAULT_JUMPCOUNT) {
-            jumpCount++;
+        if(onFloor && energy < DEFAULT_JUMPCOUNT) {
+            energy++;
         }
-        if(game.getKeyManager().up && (onFloor || (power.equals("jetpack") && jumpCount > 0))) {//Player can only jump if they are on the ground.
+        if(game.getKeyManager().up && (onFloor || (power.equals("jetpack") && energy > 0))) {//Player can only jump if they are on the ground.
             yMomentum = -acceleration * 60;
             if(!onFloor) {
-                jumpCount--;
+                energy--;
             }
         }
         if(game.getKeyManager().left) {
             drifting = false;
+            float change = 0;
             if(onFloor) {//If they are on the ground, change velocity by acceleration, player is slower when moving left
-                xMomentum -= acceleration;
+                change -= acceleration;
             } else {
-                xMomentum -= acceleration / 10;//If not on the ground, they can move left, but not as fast.
+                change -= acceleration / 10;//If not on the ground, they can move left, but not as fast.
             }
+            if(power.equals("speed") && energy > 0) {
+                energy--;
+                change *= 2;
+            }
+            xMomentum += change;
         }
         if(game.getKeyManager().right) {
             drifting = false;
+            float change = 0;
             if(onFloor) {//If they are on the ground, change velocity by +3 * acceleration
-                xMomentum += acceleration * 3;
+                change += acceleration * 3;
             } else {
-                xMomentum += acceleration;//If not on the ground, they can move right, but not as fast.
+                change += acceleration;//If not on the ground, they can move right, but not as fast.
             }
+            if(power.equals("speed")) {
+                change *= 2;
+            }
+            xMomentum += change;
         }
         if(game.getKeyManager().stop) {
             xMomentum = 0f;
@@ -143,11 +154,19 @@ public class Player extends Entity{
                     newX + width >= enemy.getX() &&
                     newY <= enemy.getY() + enemy.getHeight() &&
                     newY + height >= enemy.getY()) {
-                if(yMove > 0 && newY < enemy.getY()) {
+                if((yMove > 0 && newY < enemy.getY()) || (power.equals("invincibility") && energy > 0)) {
+                    if(power.equals("invincibility")) {
+                        energy--;
+                    }
                     level.killEnemy(enemy);
                     yMomentum = - yMomentum;
                 } else {
-                    health -= 1;
+                    double enemyDamage = 1;
+                    if(power.equals("shield") && (Math.random() > 0.2) && energy > 0) {
+                        energy--;
+                        enemyDamage = 0;
+                    }
+                    health -= enemyDamage;
                     //System.out.println("Health dropped to " + health);
                     xMomentum += enemy.getxMomentum() / 10;
                     if(health <= 0) {
@@ -163,6 +182,7 @@ public class Player extends Entity{
                     newY <= powerUp.getY() + powerUp.getHeight() &&
                     newY + height >= powerUp.getY()) {
                 power = powerUp.getPower();
+                gameState.setCurrentPowerUp(power);
             }
         }
         if(Math.random() > 0.99 && health < DEFAULT_HEALTH) {
@@ -176,8 +196,8 @@ public class Player extends Entity{
         return health;
     }
 
-    public int getJumpCount() {
-        return jumpCount;
+    public int getEnergy() {
+        return energy;
     }
 
     public void setHealth(int health) {
