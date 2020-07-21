@@ -17,6 +17,7 @@ public class GameState extends State{
     public float cameraX;
     private int score;
     private int highscore;
+    private boolean drawPowerUp = false;
 
     public GameState(Game game, int highscore) {
         super(game);
@@ -44,8 +45,11 @@ public class GameState extends State{
         }
         g.drawString("Health: " + Integer.toString(player.getHealth()), 10, 80);
         g.drawString("Energy: " + Integer.toString(player.getEnergy()), 10, 110);
-        g.drawString("Speed: " + Integer.toString(Math.round(player.getxMomentum())), 10, 140);
-        g.drawImage(currentPowerUp, 10, game.height - currentPowerUp.getHeight() * 2 - 10, currentPowerUp.getWidth() * 2, currentPowerUp.getHeight() * 2, null);
+        g.drawString("Speed: " + Integer.toString(Math.abs(Math.round(player.getxMomentum()))), 10, 140);
+        if(drawPowerUp) {
+            g.drawImage(currentPowerUp, 10, game.height - currentPowerUp.getHeight() * 2 - 10, currentPowerUp.getWidth() * 2, currentPowerUp.getHeight() * 2, null);
+            g.drawString(Integer.toString((int)(player.getPowerUpRemaining() / 60.0)), currentPowerUp.getWidth() + 20, game.height - currentPowerUp.getHeight() * 2 - 10);
+        }
     }
 
     public int getScore() {
@@ -53,6 +57,7 @@ public class GameState extends State{
     }
 
     public void setCurrentPowerUp(String powerName) {
+        drawPowerUp = true;
         if(powerName.equals("jetpack")) {
             currentPowerUp = Assets.jetpack;
         } else if(powerName.equals("speed")) {
@@ -61,6 +66,9 @@ public class GameState extends State{
             currentPowerUp = Assets.shield;
         } else if(powerName.equals("invincibility")) {
             currentPowerUp = Assets.invincibility;
+        } else {
+            currentPowerUp = Assets.player;
+            drawPowerUp = false;
         }
     }
 }

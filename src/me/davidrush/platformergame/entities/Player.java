@@ -16,13 +16,13 @@ public class Player extends Entity{
 
     private Game game;
     private GameState gameState;
-    public static final int DEFAULT_HEALTH = 100, DEFAULT_JUMPCOUNT = 50;
+    public static final int DEFAULT_HEALTH = 100, DEFAULT_JUMPCOUNT = 50, powerUpDuration = 1200;
     public static final float DEFAULT_ACCELERATION = 0.05f, DEFAULT_FRICTION = 0.2f;
     public static final float DEFAULT_GRAVITY = 0.1f;
     public static final int DEFAULT_WIDTH = 14,
                             DEFAULT_HEIGHT = 30;
     private Level level;
-    protected int health, energy;
+    protected int health, energy, powerUpRemaining = powerUpDuration;
     private long startTime;
     private String power;
 
@@ -46,6 +46,14 @@ public class Player extends Entity{
         getInput();
         move();
         checkEntityCollisions(x, y);
+        if(!power.equals("")) {
+            powerUpRemaining--;
+        }
+        if(powerUpRemaining  <= 0) {
+            power = "";
+            gameState.setCurrentPowerUp(power);
+            powerUpRemaining = powerUpDuration;
+        }
     }
 
     public void getInput() {
@@ -183,6 +191,7 @@ public class Player extends Entity{
                     newY + height >= powerUp.getY()) {
                 power = powerUp.getPower();
                 gameState.setCurrentPowerUp(power);
+                powerUpRemaining = powerUpDuration;
             }
         }
         if(Math.random() > 0.99 && health < DEFAULT_HEALTH) {
@@ -206,6 +215,10 @@ public class Player extends Entity{
 
     public float getAcceleration() {
         return acceleration;
+    }
+
+    public int getPowerUpRemaining() {
+        return powerUpRemaining;
     }
 
     public void setAcceleration(float acceleration) {
