@@ -147,12 +147,3 @@ public class Level {
         return powerUps;
     }
 }
-/*
-todo:
- Game-Over:
-    a. Player takes damage if they hit a wall too fast.
-    b. Display HP and x on the screen. Maybe also time?
-    c. Create a Game-Over screen. Here, they see big text that says "GAME OVER", as well as their sore. If they press ENTER, a new game will start.
- Saving:
-    High-scores are saved to a file so that if they quit and come back they will be able to see their best score yet.
- */

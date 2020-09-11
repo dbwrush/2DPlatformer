@@ -25,6 +25,7 @@ public class Player extends Entity{
     protected int health, energy, powerUpRemaining = powerUpDuration;
     private long startTime;
     private String power;
+    private int powerActive = 0, powerInterval = 10;
 
     public Player(Game game, float x, float y, Level level, GameState gameState) {
         super(x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT, level, DEFAULT_FRICTION, DEFAULT_ACCELERATION, game);
@@ -67,9 +68,14 @@ public class Player extends Entity{
         }
         if(game.getKeyManager().up && (onFloor || (power.equals("jetpack") && energy > 0))) {//Player can only jump if they are on the ground.
             yMomentum = -acceleration * 60;
-            if(!onFloor) {
+            powerActive++;
+            if(powerActive >= powerInterval) {
                 energy--;
+                powerActive = 0;
             }
+        }
+        if(!game.getKeyManager().up && onFloor) {
+            powerActive = 0;
         }
         if(game.getKeyManager().left) {
             drifting = false;

@@ -14,7 +14,7 @@ public class Game implements Runnable {
     private Display display;
     public int width, height;
     public String title;
-    private String version = "2D Game Test v.1.5.1";
+    private String version = "2D Game Test v.1.6";
 
     private int highscore;
 

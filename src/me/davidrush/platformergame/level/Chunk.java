@@ -76,6 +76,9 @@ public class Chunk {
                         chunk[row][col] = new Air(x,y, level);
                     }
                 }
+                if((heights[col] == row && row == 15) && (Math.random() < 0.4 || (col > 0 && chunk[row][col - 1] instanceof Wood && Math.random() < 0.7))) {
+                    chunk[row][col] = new Wood(x, y, level);
+                }
             }
         }
     }
